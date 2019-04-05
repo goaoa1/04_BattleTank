@@ -20,3 +20,6 @@ BattleTank/Content/StarterContent/
 *.sln
 
 .vs/BuildingEscape/v15/ipch/
+*.db-wal
+*.db-shm
+*.ipch
