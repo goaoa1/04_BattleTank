@@ -46,7 +46,12 @@ ATank* ATankAIController::GetPlayerTank() const
 		UE_LOG(LogTemp, Warning, TEXT("Got PlayerTank"))
 		return PlayerTank;
 	}
-	My way*/
+	My way
+	
+	DIFFERENCE: THIS IS DONE AT COMPILE TIME 
+	WHICH MEANS YOU NEED TO KNOW 'TANKPLAYERCONTROLLER' AT COMPILE TIME WHICH ALSO MEANS YOU NEED TO INSERT #include "TankPlayerController.h" ON THE HEADER FILE
+	
+	*/
 
 
 	auto PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();

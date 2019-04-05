@@ -20,7 +20,12 @@ void ATankPlayerController::BeginPlay()
 	}
 }
 
+void ATankPlayerController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	AimTowardsCrosshair();
 
+}
 
 ATank* ATankPlayerController::GetControlledTank() const //const is also a signiture
 {
@@ -28,3 +33,34 @@ ATank* ATankPlayerController::GetControlledTank() const //const is also a signit
 
 	return Cast<ATank>(GetPawn());
 }
+
+void ATankPlayerController::AimTowardsCrosshair()
+{
+	if (!GetControlledTank()) { return; }
+
+	FVector HitLocation; //OUT Parameter
+	if(GetSightRayHitLocation(HitLocation)) 
+	{
+	UE_LOG(LogTemp, Warning, TEXT("Look direction: %s"), *HitLocation.ToString())
+	}
+
+
+}
+bool ATankPlayerController::GetSightRayHitLocation(FVector & OUTHitLocation) const
+{
+	int32 ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+	
+	FVector2D ScreenLocation(ViewportSizeX * CrosshairXLocation, ViewportSizeY * CrosshairYLocation);
+
+
+	FVector CameraWorldLocation, WorldDirection;
+	if (DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraWorldLocation, WorldDirection))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *WorldDirection.ToString())
+	}
+
+	
+	return true;
+}
+
