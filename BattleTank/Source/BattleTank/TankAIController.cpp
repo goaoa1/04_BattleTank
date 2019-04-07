@@ -28,7 +28,7 @@ ATank* ATankAIController::GetControlledTank() const //const is also a signiture
 {
 
 
-	return Cast<ATank>(GetPawn());
+	return Cast<ATank>(GetPawn());//you can set default pawn in the pawn blueprint!
 }
 
 ATank* ATankAIController::GetPlayerTank() const
@@ -57,8 +57,17 @@ ATank* ATankAIController::GetPlayerTank() const
 	auto PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
 	if (!PlayerPawn) { return nullptr; }
 	return Cast<ATank>(PlayerPawn);
+}
 
 
 
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (GetPlayerTank()) 
+	{
+		GetControlledTank()->AimAt(GetPlayerTank()->GetTargetLocation());
+		GetControlledTank()->AimAt(GetPlayerTank()->GetActorLocation()); 
 
+	}
 }
