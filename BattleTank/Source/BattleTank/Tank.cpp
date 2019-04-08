@@ -8,6 +8,11 @@ void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
 	TankAimingComponent->SetBarrelReference(BarrelToSet);
 }
 
+void ATank::SetTurretReference(UTankTurret * TurretToSet)
+{
+	TankAimingComponent->SetTurretReference(TurretToSet);
+}
+
 // Sets default values
 ATank::ATank()
 {
@@ -17,6 +22,7 @@ ATank::ATank()
 	//No need to protect the pointers because it's adding in the constructor it's very likely to fail(added at construction)
 
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));//at the moment editor starts
+
 
 }
 
