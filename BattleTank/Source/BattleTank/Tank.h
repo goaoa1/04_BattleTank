@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "TankAimingComponent.h"  //needs component header included!!!
+//#include "TankAimingComponent.h"  //needs only forward declaration here but needed in cpp
 #include "Tank.generated.h"
 
-
+class UTankAimingComponent;
 class UTankBarrel;
 
 UCLASS()
@@ -34,13 +34,10 @@ private:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditAnywhere, category = Firing)
-	float LaunchSpeed = 10000.f; 
+	float LaunchSpeed = 5000.f; 
 	
 };

@@ -2,6 +2,7 @@
 
 #include "TankBarrel.h"//WHEN YOU ACTUALLY 'USE THE FUNCTION' FROM THE OTHER FILE, YOU NEED TO INCLUDE HEADER FILE. IT'S NOT ENOUGH USING FORWARD DECLARATION.
 #include "TankAimingComponent.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 
 // Sets default values for this component's properties
@@ -34,18 +35,26 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		StartLocation,
 		HitLocation,
 		LaunchSpeed,
-		//false, default
-		//0.f, 
-		//0.f, 
-		ESuggestProjVelocityTraceOption::DoNotTrace
+		false,
+		0.f, 
+		0.f, 
+		ESuggestProjVelocityTraceOption::DoNotTrace //NOT A BUG https://community.gamedev.tv/t/suggestprojectilevelocity-is-not-a-bug-working-as-intended-and-heres-why/79193
 	);
+
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *OutLaunchVelocity.ToString())
+
+
 	if (bHaveAimSolution)
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal(); //this makes it unit vector. Gets a normalized copy of the vector, checking it is safe to do so based on the length. Returns zero vector if vector length is too small to safely normalize.
 		MoveBarrelTowards(AimDirection);
 
 		auto TankName = GetOwner()->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("%s is Aiming at %s"), *TankName, *AimDirection.ToString())
+		UE_LOG(LogTemp, Warning, TEXT("Aim solution found"))
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No aim solution found"))
 	}
 }
 
@@ -57,7 +66,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		auto DeltaRotator = AimAsRotator - BarrelRotator;
 		
 
-			Barrel->Elevate(5);
+			Barrel->Elevate(DeltaRotator.Pitch);
 	}
 
 	/*
