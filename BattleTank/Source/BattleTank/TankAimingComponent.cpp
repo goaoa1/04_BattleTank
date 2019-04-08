@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "TankBarrel.h"//WHEN YOU ACTUALLY 'USE THE FUNCTION' FROM THE OTHER FILE, YOU NEED TO INCLUDE HEADER FILE. IT'S NOT ENOUGH USING FORWARD DECLARATION.
 #include "TankAimingComponent.h"
 
 
@@ -12,35 +13,56 @@ UTankAimingComponent::UTankAimingComponent()
 
 	// ...
 }
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
 	Barrel = BarrelToSet;
 }
 
 
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-	Super::BeginPlay();
 
-	// ...
-	
+void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
+{
+	if (!Barrel) { return; }
+	FVector OutLaunchVelocity(0);
+	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+
+	//Calculate the OutLaunchVelocity
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity//'::' because it is static function!! UGameStatics is for blueprint so need to manually include header in the header file.
+	(
+		this,
+		OutLaunchVelocity,
+		StartLocation,
+		HitLocation,
+		LaunchSpeed,
+		//false, default
+		//0.f, 
+		//0.f, 
+		ESuggestProjVelocityTraceOption::DoNotTrace
+	);
+	if (bHaveAimSolution)
+	{
+		auto AimDirection = OutLaunchVelocity.GetSafeNormal(); //this makes it unit vector. Gets a normalized copy of the vector, checking it is safe to do so based on the length. Returns zero vector if vector length is too small to safely normalize.
+		MoveBarrelTowards(AimDirection);
+
+		auto TankName = GetOwner()->GetName();
+		UE_LOG(LogTemp, Warning, TEXT("%s is Aiming at %s"), *TankName, *AimDirection.ToString())
+	}
 }
 
 
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
+	{
+		auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+		auto AimAsRotator = AimDirection.Rotation();
+		auto DeltaRotator = AimAsRotator - BarrelRotator;
+		
 
-	// ...
-}
+			Barrel->Elevate(5);
+	}
 
-void UTankAimingComponent::AimAt(FVector WorldSpaceAim)
-{
+	/*
 	auto OurTankName = GetOwner()->GetName();
 	auto BarrelLocation = Barrel->GetComponentLocation();
 
-	UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s from %s"), *OurTankName, *WorldSpaceAim.ToString(), *BarrelLocation.ToString())
-
-}
+	UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s from %s"), *OurTankName, *HitLocation.ToString(), *BarrelLocation.ToString())
+	*/
