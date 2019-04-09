@@ -10,6 +10,7 @@
 class UTankAimingComponent;
 class UTankBarrel;
 class UTankTurret;
+class AProjectile;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -45,5 +46,14 @@ private:
 
 	UPROPERTY(EditAnywhere, category = Firing)
 	float LaunchSpeed = 5000.f; 
+
+	UPROPERTY(EditAnywhere, category = Setup)
+	TSubclassOf<AProjectile> ProjectileBlueprint; //SubclassOf is a template class that provides UClass type safety
+
+	//UPROPERTY(EditAnywhere, category = Setup)     does not work... why?
+		//AProjectile* adsf; 
+
+	// Local Barrel reference for spawning projectile
+	UTankBarrel* Barrel = nullptr;
 	
 };
