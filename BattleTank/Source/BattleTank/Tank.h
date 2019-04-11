@@ -11,6 +11,7 @@ class UTankAimingComponent;
 class UTankBarrel;
 class UTankTurret;
 class AProjectile;
+class UTankMovementComponent;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -34,6 +35,10 @@ protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
 
+	UPROPERTY(BlueprintReadOnly)//this makes the reference be read by editor
+	UTankMovementComponent* TankMovementComponent = nullptr;
+
+
 private:
 	// Sets default values for this pawn's properties
 	ATank();
@@ -47,7 +52,7 @@ private:
 	UPROPERTY(EditAnywhere, category = Firing)
 	float LaunchSpeed = 5000.f; 
 
-	UPROPERTY(EditAnywhere, category = Setup)
+	UPROPERTY(EditDefaultsOnly, category = Setup)
 	TSubclassOf<AProjectile> ProjectileBlueprint; //SubclassOf is a template class that provides UClass type safety
 
 	//UPROPERTY(EditAnywhere, category = Setup)     does not work... why?
@@ -55,5 +60,9 @@ private:
 
 	// Local Barrel reference for spawning projectile
 	UTankBarrel* Barrel = nullptr;
+
+	UPROPERTY(EditAnywhere, category = Setup)
+	float ReloadTimeInSeconds = 3.f;
 	
+	double LastFireTime = 0;
 };

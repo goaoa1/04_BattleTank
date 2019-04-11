@@ -4,6 +4,7 @@
 #include "TankBarrel.h"
 #include "Projectile.h"
 #include "TankAimingComponent.h"
+#include "TankMovementComponent.h"
 
 void ATank::SetBarrelReference(UTankBarrel * BarrelToSet)
 {
@@ -18,14 +19,17 @@ void ATank::SetTurretReference(UTankTurret * TurretToSet)
 
 void ATank::Fire()
 {
-	if (!Barrel) { return; }
-
-	auto Projectile = GetWorld()->SpawnActor<AProjectile>(
-		ProjectileBlueprint,
-		Barrel->GetSocketLocation(FName("Projectile")),
-		Barrel->GetSocketRotation(FName("Projectile"))//StaticMeshComponent type has this kind of method
-		);
-	Projectile->LaunchProjectile(LaunchSpeed);
+	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+	if (Barrel && isReloaded)
+	{
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBlueprint,
+			Barrel->GetSocketLocation(FName("Projectile")),
+			Barrel->GetSocketRotation(FName("Projectile"))//StaticMeshComponent type has this kind of method
+			);
+		Projectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = FPlatformTime::Seconds();
+	}
 }
 
 
@@ -38,6 +42,8 @@ ATank::ATank()
 	//No need to protect the pointers because it's adding in the constructor it's very likely to fail(added at construction)
 
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));//at the moment editor starts
+
+	//TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component")); can do it differently
 
 
 }

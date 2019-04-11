@@ -49,7 +49,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		ESuggestProjVelocityTraceOption::DoNotTrace //NOT A BUG https://community.gamedev.tv/t/suggestprojectilevelocity-is-not-a-bug-working-as-intended-and-heres-why/79193
 	);
 
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *OutLaunchVelocity.ToString())
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *OutLaunchVelocity.ToString())
 
 
 	if (bHaveAimSolution)
@@ -63,7 +63,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 
 
 		auto TankName = GetOwner()->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("Aim solution found"))
+		//UE_LOG(LogTemp, Warning, TEXT("Aim solution found"))
 	}
 	else
 	{
