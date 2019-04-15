@@ -22,11 +22,14 @@ public:
 
 	virtual void BeginPlay() override;
 
-
-	ATank* GetControlledTank() const;
+	
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+protected:
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	ATank* GetControlledTank() const;//Blueprint is subclass of this C++ so it can't be in the private section but in the protected section
 
 private:
 	void AimTowardsCrosshair();

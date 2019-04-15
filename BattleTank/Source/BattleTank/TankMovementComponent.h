@@ -22,17 +22,21 @@ public:
 	void Initialize(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet);//Should be in public section because it needs to be called in blueprint
 
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = Setup)
 	void IntendMoveForward(float Throw);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = Setup)
 	void IntendTurnLeft(float Throw);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = Setup)
 	void IntendTurnRight(float Throw);
 
 
 private:
+
+	//Called from the pathfinding logic by the AI controllers
+	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
+
 	UTankTrack* LeftTrack = nullptr;//requirements of pointers and instaces are different
 	UTankTrack* RightTrack = nullptr;
 	
