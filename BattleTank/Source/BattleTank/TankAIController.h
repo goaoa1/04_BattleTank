@@ -20,7 +20,9 @@ class BATTLETANK_API ATankAIController : public AAIController
 public:
 
 
-
+protected:
+	UPROPERTY(EditAnywhere, Category = "Setup")
+	float AcceptanceRadius = 300.f;
 
 private:
 
@@ -28,7 +30,7 @@ private:
 
 	virtual void Tick(float DeltaTime) override;
 
-	float AcceptanceRadius = 300.f;
+
 //	ATank* GetControlledTank() const;
 
 

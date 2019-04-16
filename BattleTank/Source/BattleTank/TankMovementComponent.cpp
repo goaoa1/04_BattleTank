@@ -34,6 +34,7 @@ void UTankMovementComponent::IntendTurnRight(float Throw)
 	LeftTrack->SetThrottle(Throw * 2);
 	RightTrack->SetThrottle(-Throw);
 
+
 }
 
 void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, bool bForceMaxSpeed)
@@ -48,6 +49,5 @@ void UTankMovementComponent::RequestDirectMove(const FVector & MoveVelocity, boo
 	IntendTurnRight(RightThrow.Z);
 	
 
-	UE_LOG(LogTemp, Warning, TEXT("%f"), ForwardThrow)
 }
 

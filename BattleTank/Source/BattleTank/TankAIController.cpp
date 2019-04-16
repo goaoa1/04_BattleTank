@@ -78,7 +78,11 @@ void ATankAIController::Tick(float DeltaTime)
 	AimingComponent->AimAt(PlayerTank->GetActorLocation());
 	//GetComponentByClass simply calls FindComponentByClass and provides the UFUNCTION annotation so that it can be used from Blueprints. I believe the reason for doing this is that in newer versions of UE4, Epic tries to no longer expose virtual functions directly to Blueprints.
 	
+
+
 	//TODO fix below
-	AimingComponent->Fire();
-	
+	if (AimingComponent->GetFiringState() == EFiringState::Locked)
+	{
+		AimingComponent->Fire();
+	}
 }
