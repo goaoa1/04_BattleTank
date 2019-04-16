@@ -21,10 +21,18 @@ public:
 
 	//Max force per newton
 	UPROPERTY(EditDefaultsOnly)
-		float TrackMaxDrivingForce = 400000; //Assume 40tonne tank, and 1g accel
+	float TrackMaxDrivingForce = 400000; //Assume 40tonne tank, and 1g accel
 	
 	UTankTrack();
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction) override;
 
+	virtual void BeginPlay() override;
+
+
+
+
+private:
+	UFUNCTION()//need to be registered by this macro...
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 };

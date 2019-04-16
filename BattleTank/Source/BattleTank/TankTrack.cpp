@@ -9,6 +9,19 @@ UTankTrack::UTankTrack()//in order to make tick you need constructor first no re
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
+void UTankTrack::BeginPlay()
+{
+	Super::BeginPlay();
+	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit); //OnComponentHit is delegate variable of FComponentHitSigniture
+}
+
+void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit) 
+{
+	UE_LOG(LogTemp, Warning, TEXT("ASDFH"))
+}
+
+
+
 void UTankTrack::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
 	
