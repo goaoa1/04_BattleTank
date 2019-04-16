@@ -34,6 +34,8 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
+	virtual void BeginPlay() override;
+
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 
@@ -69,14 +71,15 @@ private:
 	//UPROPERTY(EditAnywhere, category = Setup)     does not work... why?
 		//AProjectile* adsf; 
 
-
-
 	UPROPERTY(EditAnywhere, category = "Setup")
 	float ReloadTimeInSeconds = 3.f;
 
-
-
 	double LastFireTime = 0;
 
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;//BUG?
+
+	bool IsBarrelMoving();
+
+	FVector AimDirection;
 
 };
