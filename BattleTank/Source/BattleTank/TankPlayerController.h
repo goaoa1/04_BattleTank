@@ -7,9 +7,8 @@
 #include "TankPlayerController.generated.h"
 
 
+class UTankAimingComponent;
 
-
-class ATank;
 /**
  * 
  */
@@ -28,8 +27,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	UFUNCTION(BlueprintCallable, Category = "Setup")
-	ATank* GetControlledTank() const;//Blueprint is subclass of this C++ so it can't be in the private section but in the protected section
+//	UFUNCTION(BlueprintCallable, Category = "Setup")
+//	ATank* GetControlledTank() const;//Blueprint is subclass of this C++ so it can't be in the private section but in the protected section
+
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+	void FoundAimingComponent(UTankAimingComponent* AimCompRef);//No need to implement the function if MACRO is on it
+
+
 
 private:
 	void AimTowardsCrosshair();
@@ -47,10 +52,11 @@ private:
 	UPROPERTY(EditAnywhere)
 	float LineTraceRange = 1000000.f;
 
-	FVector GetReachLineStart();
+//	FVector GetReachLineStart();
 
-	FVector GetReachLineEnd();
+//	FVector GetReachLineEnd();
 
 	bool GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const;
 	
+
 };

@@ -22,13 +22,13 @@ public:
 	void Initialize(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet);//Should be in public section because it needs to be called in blueprint
 
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void IntendMoveForward(float Throw);
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void IntendTurnLeft(float Throw);
 
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void IntendTurnRight(float Throw);
 
 

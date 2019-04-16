@@ -1,7 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAIController.h"
-#include "Tank.h"
+#include "TankAimingComponent.h"
+
+//Depends on movement component via pathfinding system
+
+
 
 void ATankAIController::BeginPlay()
 {
@@ -62,15 +66,19 @@ void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	auto PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	auto ControlledTank = Cast<ATank>(GetPawn());
+	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
+	auto ControlledTank = GetPawn();
 
-	if (PlayerTank) 
-	{
-		MoveToActor(PlayerTank, AcceptanceRadius);//!!
+	if (!ensure(PlayerTank && ControlledTank)) { return; }
+	
+	MoveToActor(PlayerTank, AcceptanceRadius);//!!
 
-		ControlledTank->AimAt(PlayerTank->GetActorLocation());
-		
-		ControlledTank->Fire();
-	}
+	auto AimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();//'apawn' knows 'findcomponentbyclass' function
+
+	AimingComponent->AimAt(PlayerTank->GetActorLocation());
+	//GetComponentByClass simply calls FindComponentByClass and provides the UFUNCTION annotation so that it can be used from Blueprints. I believe the reason for doing this is that in newer versions of UE4, Epic tries to no longer expose virtual functions directly to Blueprints.
+	
+	//TODO fix below
+	AimingComponent->Fire();
+	
 }

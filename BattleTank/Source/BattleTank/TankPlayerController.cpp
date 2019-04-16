@@ -2,25 +2,23 @@
 
 
 #include "TankPlayerController.h"
-#include "Tank.h"
+#include "TankAimingComponent.h"
 
 #define OUT
 
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Warning, TEXT("TankPlayerController BeginPlay"))
 
+	UE_LOG(LogTemp, Warning, TEXT("working?"))//	C++ BeginPlay works even if you have no BeginPlay BP in the editor
 
-	ATank* ControlledTank = GetControlledTank();
-	if (!ControlledTank)
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();//the red underline does not matter
+	if (!ensure(AimingComponent)) { return; }
 	{
-		UE_LOG(LogTemp, Warning, TEXT("TankPlayerController has no pawn"))
+		FoundAimingComponent(AimingComponent);//This is broadcasting the event...?
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("TankPlayerController has pawn %s"), *(ControlledTank->GetName()))
-	}
+	
+
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
@@ -30,21 +28,18 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 }
 
-ATank* ATankPlayerController::GetControlledTank() const //const is also a signiture
-{
-	
 
-	return Cast<ATank>(GetPawn());//you can set the player's pawn in the game mode blueprint!!!
-}
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!GetControlledTank()) { return; }
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
 
 	FVector HitLocation; //OUT Parameter
 	if(GetSightRayHitLocation(HitLocation)) 
 	{
-		GetControlledTank()->AimAt(HitLocation);//if this was a reference it might be lost....
+		AimingComponent->AimAt(HitLocation);
+//		GetControlledTank()->FindComponentByClass<UTankAimingComponent>()->AimAt(HitLocation);//if this was a reference it might be lost....
 	}
 
 
