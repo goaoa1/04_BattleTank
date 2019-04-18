@@ -94,7 +94,17 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 		auto DeltaRotator = AimAsRotator - TurretRotator;
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *DeltaRotator.ToString())
 	
-		Turret->Rotate(DeltaRotator.Yaw);
+
+			if (FMath::Abs(DeltaRotator.Yaw) < 180)//!!! to avoid going the long-way round
+			{
+				Turret->Rotate(DeltaRotator.Yaw);
+			}
+			else
+			{
+				Turret->Rotate(-DeltaRotator.Yaw);
+			}
+
+
 
 	}
 
@@ -102,7 +112,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 
 	void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 	{
-		if (AmmoLeft < 1)
+		if (GetRoundsLeft() < 1)
 		{
 			FiringState = EFiringState::OutOfAmmo;
 
@@ -145,7 +155,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 			Projectile->LaunchProjectile(LaunchSpeed);
 			LastFireTime = FPlatformTime::Seconds();
 
-			AmmoLeft -= 1;
+			RoundsLeft--;//YOU CAN DO THIS!
 
 		}
 
@@ -154,6 +164,11 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 	EFiringState UTankAimingComponent::GetFiringState() const
 	{
 		return FiringState;
+	}
+
+	int UTankAimingComponent::GetRoundsLeft() const
+	{
+		return RoundsLeft;
 	}
 
 

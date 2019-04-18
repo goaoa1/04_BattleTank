@@ -10,7 +10,7 @@
 
 //Enum for aiming state
 UENUM()
-enum class EFiringState : uint8
+enum class EFiringState : uint8//THIS UINT8 IS IMPORTANT
 {
 	Reloading,
 	Aiming,
@@ -48,6 +48,8 @@ public:
 
 	EFiringState GetFiringState() const;
 
+	UFUNCTION(BlueprintCallable)
+	int GetRoundsLeft() const;
 
 
 protected:
@@ -55,9 +57,9 @@ protected:
 	EFiringState FiringState = EFiringState::Reloading;
 
 	UPROPERTY(BlueprintReadOnly)
-	float AmmoLeft = 3;
+	float AmmoLeft = 3;//SHOULD USE GETTER INSTEAD
 
-
+	int RoundsLeft = 3;
 
 
 private:
