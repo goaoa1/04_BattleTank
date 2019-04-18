@@ -15,9 +15,13 @@ class BATTLETANK_API ATank : public APawn
 
 public:
 
-
+	//called by the engine when actor damage is dealt
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) override;
+	
 	
 
+	UFUNCTION(BlueprintPure, Category = "Health")//does not affect the owning object in any way and can be executed in a blueprint o level blueprint graph. like const
+	float GetHealthPercent() const;//Returns current health as a percentage of starting health, between 0 and 1!!!!!
 
 protected:
 
@@ -34,7 +38,11 @@ private:
 	// Called when the game starts or when spawned
 //	virtual void BeginPlay() override;
 
-	
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	int32 StartingHealth = 100;
+
+	UPROPERTY(VisibleAnywhere, Category = "Health")
+	int32 CurrentHealth = StartingHealth;
 	
 
 

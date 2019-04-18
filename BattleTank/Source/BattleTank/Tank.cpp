@@ -2,11 +2,16 @@
 
 #include "Tank.h"
 #include "TankBarrel.h"
+#include "Projectile.h"
 
 
 
 
 
+float ATank::GetHealthPercent() const
+{
+	return (float)CurrentHealth / (float)StartingHealth;  //casting!
+}
 
 // Sets default values
 ATank::ATank()
@@ -30,7 +35,23 @@ ATank::ATank()
 
 
 //}
+//this is called by the engine!!!!!!!!
+float ATank::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser)//this is called by the engine!!!!!!!!//this is called by the engine!!!!!!!!
+{
+
+	int32 DamahePoints = FPlatformMath::RoundToInt(DamageAmount); //!!!!!!!!!!
+	int32 DamageToApply = FMath::Clamp<int>(DamageAmount, 0, CurrentHealth);
+	
+	CurrentHealth -= DamageToApply;
+	UE_LOG(LogTemp, Warning, TEXT("%i %i"), DamageToApply, CurrentHealth) //should be %i for int or won't work at all...
 
 
+
+
+
+	return DamageToApply;
+
+
+}
 
 

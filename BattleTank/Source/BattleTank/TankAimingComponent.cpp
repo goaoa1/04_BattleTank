@@ -92,7 +92,6 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 		auto TurretRotator = Turret->GetForwardVector().Rotation();
 		auto AimAsRotator = AimDirection.Rotation();
 		auto DeltaRotator = AimAsRotator - TurretRotator;
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *DeltaRotator.ToString())
 	
 
 			if (FMath::Abs(DeltaRotator.Yaw) < 180)//!!! to avoid going the long-way round

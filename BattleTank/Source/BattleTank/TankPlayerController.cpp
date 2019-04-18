@@ -10,7 +10,7 @@ void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Warning, TEXT("working?"))//	C++ BeginPlay works even if you have no BeginPlay BP in the editor
+//	C++ BeginPlay works even if you have no BeginPlay BP in the editor
 
 	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();//the red underline does not matter
 	if (!ensure(AimingComponent)) { return; }
