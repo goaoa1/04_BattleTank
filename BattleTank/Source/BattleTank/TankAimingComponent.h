@@ -49,7 +49,7 @@ public:
 	EFiringState GetFiringState() const;
 
 	UFUNCTION(BlueprintCallable)
-	int GetRoundsLeft() const;
+	int32 GetRoundsLeft() const;
 
 
 protected:
@@ -59,7 +59,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	float AmmoLeft = 3;//SHOULD USE GETTER INSTEAD
 
-	int RoundsLeft = 3;
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	int32 RoundsLeft = 3;//int32 is platform independent. uint32 is not compatible to blueprint
 
 
 private:
@@ -69,7 +70,7 @@ private:
 
 	UTankTurret* Turret = nullptr;
 
-	UPROPERTY(EditAnywhere, category = "Firing")
+	UPROPERTY(EditAnywhere, Category = "Firing")
 	float LaunchSpeed = 5000.f;
 
 		
@@ -77,13 +78,13 @@ private:
 
 	void MoveTurretTowards(FVector AimDirection);
 
-	UPROPERTY(EditDefaultsOnly, category = "Setup")
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	TSubclassOf<AProjectile> ProjectileBlueprint; //SubclassOf is a template class that provides UClass type safety
 
 	//UPROPERTY(EditAnywhere, category = Setup)     does not work... why?
 		//AProjectile* adsf; 
 
-	UPROPERTY(EditAnywhere, category = "Setup")
+	UPROPERTY(EditAnywhere, Category = "Setup")
 	float ReloadTimeInSeconds = 3.f;
 
 	double LastFireTime = 0;

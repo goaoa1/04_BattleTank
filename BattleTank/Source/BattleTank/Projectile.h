@@ -8,6 +8,9 @@
 
 
 class UProjectileMovementComponent;
+class UParticleSystemComponent;
+
+
 
 UCLASS()
 class BATTLETANK_API AProjectile : public AActor
@@ -23,6 +26,12 @@ protected:
 	virtual void BeginPlay() override;
 
 	UProjectileMovementComponent* ProjectileMovement = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Component")//visibleanywhere make details tab visible.
+	UStaticMeshComponent* CollisionMesh = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Component")
+	UParticleSystemComponent* LaunchBlast = nullptr;
 
 	//UTankProjectileMovementComponent* ProjectileMovementComponent = nullptr;
 

@@ -2,7 +2,7 @@
 
 #include "Projectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-
+#include "Runtime/Engine/Classes/Particles/ParticleSystemComponent.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -12,6 +12,20 @@ AProjectile::AProjectile()
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement"));//at the moment editor starts
 	ProjectileMovement->bAutoActivate = false;
+
+	CollisionMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh"));//at the moment editor starts
+	SetRootComponent(CollisionMesh);
+	CollisionMesh->SetNotifyRigidBodyCollision(true);//this makes editor 'simulation generates hit event' defaults to be 'true'
+	CollisionMesh->SetVisibility(false);
+
+
+
+	LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));//at the moment editor starts
+	LaunchBlast->AttachTo(RootComponent);
+
+
+
+
 
 }
 
