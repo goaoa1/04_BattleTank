@@ -1,19 +1,23 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankTrack.h"
-
+#include "SprungWheel.h"
+#include "SpawnPoint.h"
 
 UTankTrack::UTankTrack()//in order to make tick you need constructor first no return type on the constructor
 
 {
 	PrimaryComponentTick.bCanEverTick = false;
 }
-
+/*
 void UTankTrack::BeginPlay()
 {
 	Super::BeginPlay();
-	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit); //OnComponentHit is delegate variable of FComponentHitSigniture
+//	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit); //OnComponentHit is delegate variable of FComponentHitSigniture
 }
+*/
+
+/*
 
 void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit) //will be called almost every frame
 {
@@ -24,10 +28,10 @@ void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UP
 	CurrentThrottle = 0;
 }
 
+*/
 
-
-
-
+/*
+CAN DO THIS USING WHEEL CONSTRAINTS
 void UTankTrack::ApplySideWaysForce()
 {
 	auto Slippagespeed = FVector::DotProduct(GetComponentVelocity(), GetRightVector());//DotProduct does not care order of the argument which is different from CrossProduct.
@@ -42,19 +46,61 @@ void UTankTrack::ApplySideWaysForce()
 	TankRoot->AddForce(CorrectionForce);
 }
 
+*/
 
 void UTankTrack::SetThrottle(float Throttle)
 {
-	CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle, -3, 3);//why -3? because i had less track power for both tracks ..
+	float CurrentThrottle = FMath::Clamp<float>(Throttle, -3, 3);//why -3? because i had less track power for both tracks .. CurrentThrottle + Throttle
+	DriveTrack(CurrentThrottle);
+
 }
 
 
-void UTankTrack::DriveTrack()
+void UTankTrack::DriveTrack(float CurrentThrottle)
 {
-	auto ForceApplied = GetForwardVector() * CurrentThrottle * TrackMaxDrivingForce;
+//	auto ForceApplied = GetForwardVector() * CurrentThrottle * TrackMaxDrivingForce;
 
-	auto ForceLocation = GetComponentLocation();
+//	auto ForceLocation = GetComponentLocation();
 
-	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
-	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
+//	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
+//	TankRoot->AddForceAtLocation(ForceApplied, ForceLocation);
+
+
+	auto ForceApplied = CurrentThrottle * TrackMaxDrivingForce;
+
+	auto Wheels = GetWheels();
+	auto ForcePerWheel = ForceApplied / Wheels.Num();
+	for (ASprungWheel* Wheel : Wheels)
+	{
+		Wheel->AddDrivingForce(ForcePerWheel);
+	}
+
 }
+
+TArray<ASprungWheel*> UTankTrack::GetWheels() const		//CONST is also a signiture !
+{
+	TArray<class ASprungWheel*> ResultArray;
+
+	TArray<class USceneComponent*> Children;
+
+	GetChildrenComponents(true, Children);
+
+	for (USceneComponent* Child : Children)
+	{
+		auto SpawnPointChild = Cast<USpawnPoint>(Child);
+		if (!SpawnPointChild) continue; //Not RETURN HERE. WE WANT TO KEEP GOING!!!!!! CONTINUE !!!
+
+
+		AActor* SpawnedChild = SpawnPointChild->GetSpawnedActor();//!!!! get spawned actor
+
+		auto SprungWheel = Cast<ASprungWheel>(SpawnedChild);
+		if (!SprungWheel) continue;
+
+		ResultArray.Add(SprungWheel);
+
+	}
+
+	return ResultArray;;
+}
+
+	

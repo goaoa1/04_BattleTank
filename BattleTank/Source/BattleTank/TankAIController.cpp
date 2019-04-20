@@ -26,6 +26,26 @@ void ATankAIController::BeginPlay()
 
 }
 
+void ATankAIController::SetPawn(APawn * InPawn)//this gets called when the pawn gets possessed ... it happens at different time other than constructor and beginplay(). constructor is too early, beginplay might happens before controller possesses pawn... want to happen only once.
+{
+	Super::SetPawn(InPawn);
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankAIController::OnPossessedTankDeath);
+
+
+	}
+}
+
+void ATankAIController::OnPossessedTankDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("DEAD"))
+	GetPawn()->DetachFromControllerPendingDestroy();
+}
+
 
 
 //ATank* ATankAIController::GetControlledTank() const //const is also a signiture
@@ -69,7 +89,7 @@ void ATankAIController::Tick(float DeltaTime)
 	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 	auto ControlledTank = GetPawn();
 
-	if (!ensure(PlayerTank && ControlledTank)) { return; }
+	if (!(PlayerTank && ControlledTank)) { return; } //if (!ensure(PlayerTank && ControlledTank)) { return; }-> does not take automotar in to account
 	
 	MoveToActor(PlayerTank, AcceptanceRadius);//!!
 
@@ -86,3 +106,5 @@ void ATankAIController::Tick(float DeltaTime)
 		AimingComponent->Fire();
 	}
 }
+
+

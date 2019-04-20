@@ -3,6 +3,7 @@
 
 #include "TankPlayerController.h"
 #include "TankAimingComponent.h"
+#include "Tank.h"
 
 #define OUT
 
@@ -21,8 +22,31 @@ void ATankPlayerController::BeginPlay()
 
 }
 
+void ATankPlayerController::SetPawn(APawn * InPawn)//this gets called when the pawn gets possessed ... it happens at different time other than constructor and beginplay(). constructor is too early, beginplay might happens before controller possesses pawn... want to happen only once.
+{
+	Super::SetPawn(InPawn);
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::OnPossessedTankDeath);
+
+
+	}
+}
+
+void ATankPlayerController::OnPossessedTankDeath()
+{
+	StartSpectatingOnly();
+}
+
+
+
+
 void ATankPlayerController::Tick(float DeltaTime)
 {
+	if (!GetPawn()) { return; }
 	Super::Tick(DeltaTime);
 	AimTowardsCrosshair();
 
@@ -84,7 +108,7 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 		HitResult,
 		StartLocation,
 		EndLocation,
-		ECollisionChannel::ECC_Visibility)
+		ECollisionChannel::ECC_Camera)//ECC_Visibility might hit UI)
 		)//other parameters are set by default!!!!  ADVANCED OPTIONS ARE MAYBE HIDDEN...?
 	{
 		HitLocation = HitResult.Location;

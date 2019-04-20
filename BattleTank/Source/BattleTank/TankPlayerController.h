@@ -26,6 +26,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
+	void SetPawn(APawn * InPawn);
+
+
+	UFUNCTION()
+	void OnPossessedTankDeath();
+
 protected:
 //	UFUNCTION(BlueprintCallable, Category = "Setup")
 //	ATank* GetControlledTank() const;//Blueprint is subclass of this C++ so it can't be in the private section but in the protected section

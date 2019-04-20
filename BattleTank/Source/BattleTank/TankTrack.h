@@ -25,16 +25,20 @@ public:
 	
 	UTankTrack();
 
-	virtual void BeginPlay() override;
+//	virtual void BeginPlay() override;
 
 
 
 
 private:
-	UFUNCTION()//need to be registered by this macro...
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
-	void ApplySideWaysForce();
-	void DriveTrack();
+//	UFUNCTION()//need to be registered by this macro...
+//	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+//	void ApplySideWaysForce();
+	void DriveTrack(float CurrentThrottle);
+//	float CurrentThrottle = 0;
 
-	float CurrentThrottle = 0;
+
+	TArray<class ASprungWheel*> GetWheels() const;
+
+
 };
