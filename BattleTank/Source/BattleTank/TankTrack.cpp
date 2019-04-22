@@ -69,24 +69,32 @@ void UTankTrack::DriveTrack(float CurrentThrottle)
 	auto ForceApplied = CurrentThrottle * TrackMaxDrivingForce;
 
 	auto Wheels = GetWheels();
+
 	auto ForcePerWheel = ForceApplied / Wheels.Num();
+
+
 	for (ASprungWheel* Wheel : Wheels)
 	{
+
+		//PROBLEM
 		Wheel->AddDrivingForce(ForcePerWheel);
+
 	}
 
 }
 
 TArray<ASprungWheel*> UTankTrack::GetWheels() const		//CONST is also a signiture !
 {
-	TArray<class ASprungWheel*> ResultArray;
+	TArray<ASprungWheel*> ResultArray;
 
-	TArray<class USceneComponent*> Children;
+	TArray<USceneComponent*> Children;
 
 	GetChildrenComponents(true, Children);
 
-	for (USceneComponent* Child : Children)
+	for (UObject* Child : Children)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *Child->GetName())//ONLY MassAxleConstraint
+
 		auto SpawnPointChild = Cast<USpawnPoint>(Child);
 		if (!SpawnPointChild) continue; //Not RETURN HERE. WE WANT TO KEEP GOING!!!!!! CONTINUE !!!
 
@@ -99,8 +107,10 @@ TArray<ASprungWheel*> UTankTrack::GetWheels() const		//CONST is also a signiture
 		ResultArray.Add(SprungWheel);
 
 	}
+	UE_LOG(LogTemp, Warning, TEXT("%d"), ResultArray.Num())
+	//Num is 0 situation
 
-	return ResultArray;;
+	return ResultArray;
 }
 
 	

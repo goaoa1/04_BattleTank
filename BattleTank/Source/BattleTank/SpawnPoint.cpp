@@ -20,8 +20,8 @@ void USpawnPoint::BeginPlay()
 {
 	Super::BeginPlay();
 	
-
-	AActor* SpawnedActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnClass, GetComponentTransform());//way to use template method!!!!!!!!
+	//AActor* 
+	SpawnedActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnClass, GetComponentTransform());//way to use template method!!!!!!!!
 
 	if (!SpawnedActor)  return;
 	SpawnedActor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);//KeepRelativeTransform would position further away
